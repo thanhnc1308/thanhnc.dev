@@ -14,4 +14,11 @@ npm run dev
 
 - docker run -p 3000:3000 thanhnc.tech:v1
 
+## Deploy MongoDB Atlas
+
+$ export MONGODB_ATLAS_PUBLIC_KEY="xxxx" # https://www.mongodb.com/docs/atlas/configure-api-access/
+$ export MONGODB_ATLAS_PRIVATE_KEY="xxxx"
+$ terraform plan
+$ terraform apply
+
 ## Deploy
