@@ -16,9 +16,14 @@ npm run dev
 
 ## Deploy MongoDB Atlas
 
-$ export MONGODB_ATLAS_PUBLIC_KEY="xxxx" # https://www.mongodb.com/docs/atlas/configure-api-access/
-$ export MONGODB_ATLAS_PRIVATE_KEY="xxxx"
+In terraform/
+
+```
+$ cp terraform.tfvars.example terraform.tfvars
+$ terraform init # first time run
 $ terraform plan
 $ terraform apply
+$ terraform output private_connection_string # get db connection string
+```
 
 ## Deploy

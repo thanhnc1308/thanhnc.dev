@@ -1,0 +1,35 @@
+# https://www.mongodb.com/docs/atlas/configure-api-access/
+mongodbatlas_public_key  = "TODO"
+mongodbatlas_private_key = "TODO"
+
+project_name          = "thanhncdev"
+mongodbatlas_username = "TODO"
+mongodbatlas_password = "TODO"
+application           = "thanhncdev-cluster"
+environment           = "dev"
+cluster_name          = "thanhncdev"
+
+region_configs = [{
+  provider_name = "TENANT" # only TENANT supports M0 instance size
+  backing_provider_name = "AWS"
+  region_name   = "AP_SOUTHEAST_1"
+  priority      = 7
+
+  electable_specs = {
+    instance_size = "M0"
+    node_count    = 1
+  }
+}]
+
+roles = [{
+  "role_name"     = "readWrite",
+  "database_name" = "thanhncdev"
+  }, {
+  "role_name" : "read",
+  "database_name" : "thanhncdev"
+}]
+
+scope = [{
+  name = "thanhncdev",
+  type = "CLUSTER"
+}]
