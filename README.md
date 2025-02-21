@@ -1,4 +1,4 @@
-# thanhnc.tech
+# thanhnc.dev
 
 ## Run
 
@@ -10,9 +10,9 @@ npm run dev
 
 - npm run build
 
-- docker build -t thanhnc.tech:v1 .
+- docker build -t thanhnc.dev:v1 .
 
-- docker run -p 3000:3000 thanhnc.tech:v1
+- docker run -p 3000:3000 thanhnc.dev:v1
 
 ## Deploy MongoDB Atlas
 
