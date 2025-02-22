@@ -16,6 +16,7 @@ import MuiCard from '@mui/material/Card'
 import { FacebookIcon, GoogleIcon } from '@/components/icons'
 import ForgotPassword from '@/components/login/ForgotPassword'
 import { styled } from '@mui/material'
+import { signIn } from 'next-auth/react'
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -179,15 +180,10 @@ export default function Login() {
           </Box>
           <Divider>or</Divider>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <Button fullWidth variant='outlined' onClick={() => alert('Log in with Google')} startIcon={<GoogleIcon />}>
+            <Button fullWidth variant='outlined' onClick={() => signIn('google')} startIcon={<GoogleIcon />}>
               Log in with Google
             </Button>
-            <Button
-              fullWidth
-              variant='outlined'
-              onClick={() => alert('Log in with Facebook')}
-              startIcon={<FacebookIcon />}
-            >
+            <Button fullWidth variant='outlined' onClick={() => signIn('facebook')} startIcon={<FacebookIcon />}>
               Log in with Facebook
             </Button>
             <Typography sx={{ textAlign: 'center' }}>
