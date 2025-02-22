@@ -1,3 +1,3 @@
 export default function InvitationCard() {
-  return <div>InvitationCard</div>
+  return <div>InvitationCard</div>;
 }

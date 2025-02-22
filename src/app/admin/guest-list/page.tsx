@@ -1,3 +1,3 @@
 export default function GuestList() {
-  return <div>GuestList</div>
+  return <div>GuestList</div>;
 }
