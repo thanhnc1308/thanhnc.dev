@@ -1,9 +1,8 @@
 import * as React from 'react';
-import SvgIcon from '@mui/material/SvgIcon';
 
 export function FacebookIcon() {
   return (
-    <SvgIcon>
+    <div>
       <svg
         width='16'
         height='16'
@@ -33,13 +32,13 @@ export function FacebookIcon() {
           </linearGradient>
         </defs>
       </svg>
-    </SvgIcon>
+    </div>
   );
 }
 
 export function GoogleIcon() {
   return (
-    <SvgIcon>
+    <div>
       <svg
         width='16'
         height='16'
@@ -64,6 +63,6 @@ export function GoogleIcon() {
           fill='#EA4335'
         />
       </svg>
-    </SvgIcon>
+    </div>
   );
 }
