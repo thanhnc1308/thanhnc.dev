@@ -1,9 +1,12 @@
+'use client';
+
 import Link from 'next/link';
 import { CheckIcon, ClockIcon } from '@heroicons/react/24/outline';
 import { Guest, GuestStatus } from '@/types/guest';
 import { Button } from '@headlessui/react';
 import { ActionType } from '@/types/common';
-import { createGuest, updateGuestById } from '@/actions/guest-list';
+import { createGuest, GuestState, updateGuestById } from '@/actions/guest-list';
+import { useActionState } from 'react';
 
 export default function Form({
   guest,
@@ -12,13 +15,17 @@ export default function Form({
   guest: Guest;
   actionType: ActionType;
 }) {
+  const initialState: GuestState = { message: null, errors: {} };
   const action =
     actionType === ActionType.Create
       ? createGuest
       : updateGuestById.bind(null, guest.id);
+  const [state, formAction] = useActionState(action, initialState);
+
+  console.log('state', state);
 
   return (
-    <form id={guest.id} action={action}>
+    <form id={guest.id} action={formAction}>
       <div className='rounded-md bg-gray-50 p-4 md:p-6'>
         {/* Guest name */}
         <div className='mb-4'>
@@ -31,6 +38,7 @@ export default function Form({
                 id='name'
                 name='name'
                 type='text'
+                required
                 defaultValue={guest.name}
                 placeholder='Guest name'
                 className='peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500'
@@ -51,6 +59,7 @@ export default function Form({
                 name='memberCount'
                 type='number'
                 step='1'
+                required
                 defaultValue={guest.memberCount}
                 placeholder='Member Count'
                 className='peer block w-full rounded-md border border-gray-200 py-2 pl-10 text-sm outline-2 placeholder:text-gray-500'

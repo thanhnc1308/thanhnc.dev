@@ -2,11 +2,16 @@ import { fetchGuestById } from '@/actions/guest-list';
 import Breadcrumbs from '@/components/guest-list/Breadcrumbs';
 import GuestDetailForm from '@/components/guest-list/GuestDetailForm';
 import { ActionType } from '@/types/common';
+import { notFound } from 'next/navigation';
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
   const id = params.id;
   const guest = await fetchGuestById(id);
+
+  if (!guest) {
+    notFound();
+  }
 
   return (
     <main>
