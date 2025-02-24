@@ -1,15 +1,17 @@
+import { signOut } from '@/auth';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import {
   Bars3Icon,
   XMarkIcon,
   UserCircleIcon,
+  PowerIcon,
 } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import Link from 'next/link';
 
 const navigation = [
-  { name: 'Guest List', href: '#', current: true },
-  { name: 'Wedding editor', href: '#', current: false },
+  { name: 'Guest List', href: '/admin/guest-list', current: true },
+  { name: 'Wedding editor', href: '/admin/wedding-editor', current: false },
 ];
 
 export default function AdminLayout({
@@ -58,17 +60,25 @@ export default function AdminLayout({
                 </div>
               </div>
             </div>
-            <div className='absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
+            <div className='relative flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0'>
               {/* Profile dropdown */}
               <Menu>
-                <MenuButton className='relative flex rounded-full bg-gray-800 text-sm cursor-pointer data-[active]:bg-blue-200'>
-                  <UserCircleIcon className='size-6 text-white' />
+                <MenuButton className='flex rounded-full bg-gray-800 text-sm cursor-pointer'>
+                  <UserCircleIcon className='size-10 text-white' />
                 </MenuButton>
-                <MenuItems anchor='bottom'>
+                <MenuItems transition anchor='bottom' className={'mt-2'}>
                   <MenuItem>
-                    <div className='block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden'>
-                      Sign out
-                    </div>
+                    <form
+                      action={async () => {
+                        'use server';
+                        await signOut({ redirectTo: '/login' });
+                      }}
+                    >
+                      <button className='flex grow items-center justify-center gap-2 rounded-md bg-gray-50 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3 cursor-pointer h-8'>
+                        <PowerIcon className='w-6 h-5' />
+                        <div className='hidden md:block'>Sign Out</div>
+                      </button>
+                    </form>
                   </MenuItem>
                 </MenuItems>
               </Menu>
