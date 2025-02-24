@@ -1,0 +1,154 @@
+import {
+  CheckIcon,
+  ClockIcon,
+  MinusIcon,
+  PencilIcon,
+} from '@heroicons/react/24/outline';
+import { TrashIcon } from '@heroicons/react/24/outline';
+import clsx from 'clsx';
+import Pagination from './Pagination';
+import { paginateGuestList } from '@/actions/guest-list';
+import { GuestStatus } from '@/types/guest';
+
+export function UpdateAction({ id }: { id: string }) {
+  return (
+    <button id={id} className='rounded-md border p-2 hover:bg-gray-100'>
+      <PencilIcon className='w-5' />
+    </button>
+  );
+}
+
+export function DeleteAction({ id }: { id: string }) {
+  return (
+    <>
+      <button
+        id={id}
+        type='submit'
+        className='rounded-md border p-2 hover:bg-gray-100'
+      >
+        <span className='sr-only'>Delete</span>
+        <TrashIcon className='w-5' />
+      </button>
+    </>
+  );
+}
+
+export function Status({ status }: { status: string }) {
+  return (
+    <span
+      className={clsx(
+        'inline-flex items-center rounded-full px-2 py-1 text-xs',
+        {
+          'bg-gray-100 text-gray-500': status === GuestStatus.Pending,
+          'bg-green-500 text-white': status === GuestStatus.Accepted,
+          'bg-red-500 text-white': status === GuestStatus.Declined,
+        },
+      )}
+    >
+      {status === GuestStatus.Pending ? (
+        <>
+          Pending
+          <ClockIcon className='ml-1 w-4 text-gray-500' />
+        </>
+      ) : null}
+      {status === GuestStatus.Accepted ? (
+        <>
+          Accepted
+          <CheckIcon className='ml-1 w-4 text-white' />
+        </>
+      ) : null}
+      {status === GuestStatus.Declined ? (
+        <>
+          Declined
+          <MinusIcon className='ml-1 w-4 text-white' />
+        </>
+      ) : null}
+    </span>
+  );
+}
+
+export default async function Table({
+  query,
+  currentPage,
+}: {
+  query: string;
+  currentPage: number;
+}) {
+  const { data, totalPages } = await paginateGuestList({ query, currentPage });
+
+  return (
+    <div className='mt-6 flow-root'>
+      <div className='inline-block min-w-full align-middle'>
+        <div className='rounded-lg bg-gray-50 p-2 md:pt-0'>
+          <div className='md:hidden'>
+            {data?.map((guest) => (
+              <div
+                key={guest.id}
+                className='mb-2 w-full rounded-md bg-white p-4'
+              >
+                <div className='flex items-center justify-between border-b pb-4'>
+                  <div>
+                    <p className='text-sm text-gray-500'>{guest.name}</p>
+                  </div>
+                  <Status status={guest.status} />
+                </div>
+                <div className='flex w-full items-center justify-between pt-4'>
+                  <div>
+                    <p className='text-xl font-medium'>{guest.memberCount}</p>
+                  </div>
+                  <div className='flex justify-end gap-2'>
+                    <UpdateAction id={guest.id} />
+                    <DeleteAction id={guest.id} />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <table className='hidden min-w-full text-gray-900 md:table'>
+            <thead className='rounded-lg text-left text-sm font-normal'>
+              <tr>
+                <th scope='col' className='px-3 py-5 font-medium'>
+                  Name
+                </th>
+                <th scope='col' className='px-3 py-5 font-medium'>
+                  Status
+                </th>
+                <th scope='col' className='px-3 py-5 font-medium'>
+                  Member Count
+                </th>
+                <th scope='col' className='py-3 pl-6 pr-3'>
+                  <span className='sr-only'>Actons</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody className='bg-white'>
+              {data?.map((guest) => (
+                <tr
+                  key={guest.id}
+                  className='w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg'
+                >
+                  <td className='whitespace-nowrap px-3 py-3'>{guest.name}</td>
+                  <td className='whitespace-nowrap px-3 py-3'>
+                    <Status status={guest.status} />
+                  </td>
+                  <td className='whitespace-nowrap px-3 py-3'>
+                    {guest.memberCount}
+                  </td>
+                  <td className='whitespace-nowrap py-3 pl-6 pr-3'>
+                    <div className='flex justify-end gap-3'>
+                      <UpdateAction id={guest.id} />
+                      <DeleteAction id={guest.id} />
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div className='mt-5 flex w-full justify-end'>
+        <Pagination totalPages={totalPages} />
+      </div>
+    </div>
+  );
+}
