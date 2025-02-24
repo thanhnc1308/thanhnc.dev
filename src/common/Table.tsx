@@ -9,12 +9,17 @@ import clsx from 'clsx';
 import Pagination from './Pagination';
 import { paginateGuestList } from '@/actions/guest-list';
 import { GuestStatus } from '@/types/guest';
+import Link from 'next/link';
 
 export function UpdateAction({ id }: { id: string }) {
   return (
-    <button id={id} className='rounded-md border p-2 hover:bg-gray-100'>
+    <Link
+      id={id}
+      href={`/admin/guest-list/edit/${id}`}
+      className='rounded-md border p-2 hover:bg-gray-100'
+    >
       <PencilIcon className='w-5' />
-    </button>
+    </Link>
   );
 }
 
