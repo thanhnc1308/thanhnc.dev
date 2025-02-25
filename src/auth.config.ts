@@ -1,6 +1,7 @@
 import type { NextAuthConfig } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
+import { z } from 'zod';
 
 const isAdminRoutes = (path: string) => path.startsWith('/admin');
 const isProtectedRoutes = (path: string) => ['TODO'].includes(path);
@@ -13,8 +14,28 @@ export const authConfig = {
   providers: [
     Credentials({
       async authorize(credentials) {
-        // TODO
-        console.debug('authorize', credentials);
+        const parsedCredentials = z
+          .object({ email: z.string().email(), password: z.string().min(6) })
+          .safeParse(credentials);
+
+        if (!parsedCredentials.success) {
+          return null;
+        }
+
+        // const { email, password } = parsedCredentials.data;
+        // const user = await getUser(email);
+
+        // if (!user) {
+        //   return null;
+        // }
+
+        // const passwordsMatch = await bcrypt.compare(password, user.password);
+        // if (!passwordsMatch) {
+        //   return null;
+        // }
+
+        // return user;
+
         return null;
       },
     }),
