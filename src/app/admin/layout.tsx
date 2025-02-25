@@ -10,7 +10,7 @@ import clsx from 'clsx';
 import Link from 'next/link';
 
 const navigation = [
-  { name: 'Guest List', href: '/admin/guest-list', current: true },
+  { name: 'Guest List', href: '/admin/guest-list', current: false },
   { name: 'Wedding editor', href: '/admin/wedding-editor', current: false },
 ];
 
@@ -40,6 +40,9 @@ export default function AdminLayout({
               </button>
             </div>
             <div className='flex flex-1 items-center justify-center sm:items-stretch sm:justify-start'>
+              <div className='flex items-center justify-center space-x-4 text-white cursor-pointer'>
+                <Link href='/'>thanhnc.dev</Link>
+              </div>
               <div className='hidden sm:ml-6 sm:block'>
                 <div className='flex space-x-4'>
                   {navigation.map((item) => (

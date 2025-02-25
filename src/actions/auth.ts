@@ -9,7 +9,10 @@ const LoginSchema = z.object({
   password: z.string().min(6),
 });
 
-export async function login(prevState: string | undefined, formData: FormData) {
+export async function loginCredentials(
+  prevState: string | undefined,
+  formData: FormData,
+) {
   try {
     const validatedFields = LoginSchema.safeParse({
       email: formData.get('email'),
@@ -26,6 +29,20 @@ export async function login(prevState: string | undefined, formData: FormData) {
       switch (error.type) {
         case 'CredentialsSignin':
           return 'Invalid credentials.';
+        default:
+          return 'Something went wrong.';
+      }
+    }
+    throw error;
+  }
+}
+
+export async function loginGoogleOAuth() {
+  try {
+    await signIn('google');
+  } catch (error) {
+    if (error instanceof AuthError) {
+      switch (error.type) {
         default:
           return 'Something went wrong.';
       }
