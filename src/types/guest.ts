@@ -13,5 +13,5 @@ export type Guest = {
 
 export type GuestListPaginationResponse = {
   data: Guest[];
-  totalPages: number;
+  total: number;
 };

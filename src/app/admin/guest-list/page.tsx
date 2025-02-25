@@ -15,6 +15,7 @@ export default async function GuestListPage(props: {
   const searchParams = await props.searchParams;
   const query = searchParams?.query || '';
   const currentPage = Number(searchParams?.page) || 1;
+  const rowsPerPage = 10;
 
   return (
     <div className='w-full px-5'>
@@ -35,7 +36,11 @@ export default async function GuestListPage(props: {
         </Link>
       </div>
       <Suspense key={query + currentPage} fallback={<TableSkeletons />}>
-        <Table query={query} currentPage={currentPage} />
+        <Table
+          query={query}
+          currentPage={currentPage}
+          rowsPerPage={rowsPerPage}
+        />
       </Suspense>
     </div>
   );

@@ -13,16 +13,18 @@ export default async function Page() {
 
   return (
     <main>
-      <Breadcrumbs
-        breadcrumbs={[
-          { label: 'Guest list', href: '/admin/guest-list' },
-          {
-            label: 'Add new guest',
-            href: '/admin/guest-list/add',
-            active: true,
-          },
-        ]}
-      />
+      <div className='p-4 md:p-6'>
+        <Breadcrumbs
+          breadcrumbs={[
+            { label: 'Guest list', href: '/admin/guest-list' },
+            {
+              label: 'Add new guest',
+              href: '/admin/guest-list/add',
+              active: true,
+            },
+          ]}
+        />
+      </div>
       <GuestDetailForm actionType={ActionType.Create} guest={defaultGuest} />
     </main>
   );

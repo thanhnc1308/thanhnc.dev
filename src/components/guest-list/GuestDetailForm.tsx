@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { CheckIcon, ClockIcon } from '@heroicons/react/24/outline';
+import { CheckIcon, ClockIcon, MinusIcon } from '@heroicons/react/24/outline';
 import { Guest, GuestStatus } from '@/types/guest';
 import { Button } from '@headlessui/react';
 import { ActionType } from '@/types/common';
@@ -86,9 +86,9 @@ export default function Form({
                 />
                 <label
                   htmlFor={GuestStatus.Accepted}
-                  className='ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600'
+                  className='ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white'
                 >
-                  Accepted <ClockIcon className='h-4 w-4' />
+                  Accepted <CheckIcon className='h-4 w-4' />
                 </label>
               </div>
               <div className='flex items-center'>
@@ -102,9 +102,9 @@ export default function Form({
                 />
                 <label
                   htmlFor={GuestStatus.Pending}
-                  className='ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white'
+                  className='ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-600'
                 >
-                  Pending <CheckIcon className='h-4 w-4' />
+                  Pending <ClockIcon className='h-4 w-4' />
                 </label>
               </div>
               <div className='flex items-center'>
@@ -118,23 +118,28 @@ export default function Form({
                 />
                 <label
                   htmlFor={GuestStatus.Declined}
-                  className='ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white'
+                  className='ml-2 flex cursor-pointer items-center gap-1.5 rounded-full bg-red-500 px-3 py-1.5 text-xs font-medium text-white'
                 >
-                  Declined <CheckIcon className='h-4 w-4' />
+                  Declined <MinusIcon className='h-4 w-4' />
                 </label>
               </div>
             </div>
           </div>
         </fieldset>
       </div>
-      <div className='mt-6 flex justify-end gap-4'>
+      <div className='mt-6 flex justify-end gap-4 md:p-6'>
         <Link
           href='/admin/guest-list'
           className='flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200'
         >
           Cancel
         </Link>
-        <Button type='submit'>Submit</Button>
+        <Button
+          className='flex h-10 items-center rounded-lg bg-gray-100 px-4 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-200 cursor-pointer'
+          type='submit'
+        >
+          Submit
+        </Button>
       </div>
     </form>
   );

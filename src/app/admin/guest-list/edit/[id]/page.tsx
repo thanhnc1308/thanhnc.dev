@@ -15,16 +15,18 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
 
   return (
     <main>
-      <Breadcrumbs
-        breadcrumbs={[
-          { label: 'Guest list', href: '/admin/guest-list' },
-          {
-            label: 'Edit guest',
-            href: `/admin/guest-list/edit/${id}`,
-            active: true,
-          },
-        ]}
-      />
+      <div className='p-4 md:p-6'>
+        <Breadcrumbs
+          breadcrumbs={[
+            { label: 'Guest list', href: '/admin/guest-list' },
+            {
+              label: 'Edit guest',
+              href: `/admin/guest-list/edit/${id}`,
+              active: true,
+            },
+          ]}
+        />
+      </div>
       <GuestDetailForm actionType={ActionType.Update} guest={guest} />
     </main>
   );

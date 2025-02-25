@@ -75,11 +75,17 @@ export function Status({ status }: { status: string }) {
 export default async function Table({
   query,
   currentPage,
+  rowsPerPage,
 }: {
   query: string;
   currentPage: number;
+  rowsPerPage: number;
 }) {
-  const { data, totalPages } = await paginateGuestList({ query, currentPage });
+  const { data, total } = await paginateGuestList({
+    query,
+    currentPage,
+    rowsPerPage,
+  });
 
   return (
     <div className='mt-6 flow-root'>
@@ -152,7 +158,7 @@ export default async function Table({
         </div>
       </div>
       <div className='mt-5 flex w-full justify-end'>
-        <Pagination totalPages={totalPages} />
+        <Pagination total={total} />
       </div>
     </div>
   );

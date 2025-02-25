@@ -72,7 +72,7 @@ function PaginationArrow({
   );
 }
 
-export default function Pagination({ totalPages }: { totalPages: number }) {
+export default function Pagination({ total }: { total: number }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get('page')) || 1;
@@ -83,7 +83,7 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
     return `${pathname}?${params.toString()}`;
   };
 
-  const allPages = generatePagination(currentPage, totalPages);
+  const allPages = generatePagination(currentPage, total);
 
   return (
     <div className='inline-flex'>
@@ -117,7 +117,7 @@ export default function Pagination({ totalPages }: { totalPages: number }) {
       <PaginationArrow
         direction='right'
         href={createPageURL(currentPage + 1)}
-        isDisabled={currentPage >= totalPages}
+        isDisabled={currentPage >= total}
       />
     </div>
   );

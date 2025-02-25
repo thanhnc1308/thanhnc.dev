@@ -1,59 +1,77 @@
 'use server';
 
+import guestModel from '@/db/models/guest.model';
+import dbConnect from '@/db/mongodb';
 import { Guest, GuestListPaginationResponse, GuestStatus } from '@/types/guest';
 import { PaginationRequest } from '@/types/pagination';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const _buildFilter = (query: string) => {
+  return {};
+};
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const _buildSort = (sort: string) => {
+  return {};
+};
+
 const paginateGuestList = async ({
   query,
-  currentPage,
+  currentPage = 1,
+  rowsPerPage = 10,
 }: PaginationRequest): Promise<GuestListPaginationResponse> => {
   try {
-    console.log('query', query, currentPage);
+    await dbConnect();
 
-    // mock
-    const data = [
-      {
-        id: '1',
-        name: 'John Doe',
-        status: GuestStatus.Accepted,
-        memberCount: 2,
-      },
-      {
-        id: '2',
-        name: 'Jane Doe',
-        status: GuestStatus.Pending,
-        memberCount: 3,
-      },
-      {
-        id: '3',
-        name: 'John Smith',
-        status: GuestStatus.Declined,
-        memberCount: 1,
-      },
-    ];
+    const filter = _buildFilter(query);
+    const sort = _buildSort(query);
+    const skip = (currentPage - 1) * rowsPerPage;
+    const fetchGuestsPromise = guestModel
+      .find(filter)
+      .sort(sort)
+      .skip(skip)
+      .limit(rowsPerPage)
+      .exec();
+    const countTotalGuestPromise = guestModel.countDocuments(filter).exec();
+
+    const [guests, total] = await Promise.all([
+      fetchGuestsPromise,
+      countTotalGuestPromise,
+    ]);
 
     return {
-      totalPages: 100,
-      data,
+      total,
+      data: guests.map((guest) => ({
+        id: guest._id.toString(),
+        name: guest.name,
+        memberCount: guest.memberCount,
+        status: guest.status,
+      })),
     };
   } catch (error) {
     console.error('paginateGuestList', error);
     return {
-      totalPages: 0,
+      total: 0,
       data: [],
     };
   }
 };
 
-const fetchGuestById = async (guestId: string): Promise<Guest> => {
+const fetchGuestById = async (guestId: string): Promise<Guest | null> => {
+  const _guest = await guestModel.findById(guestId).exec();
+
+  if (!_guest) {
+    return null;
+  }
+
   return {
-    id: guestId,
-    name: 'John Smith',
-    status: GuestStatus.Declined,
-    memberCount: 1,
+    id: _guest._id.toString(),
+    name: _guest.name,
+    memberCount: _guest.memberCount,
+    status: _guest.status,
   };
 };
 
@@ -102,7 +120,8 @@ const createGuest = async (prevState: GuestState, formData: FormData) => {
   }
 
   try {
-    console.log(validatedFields.data);
+    await dbConnect();
+    await guestModel.create(validatedFields.data);
   } catch (e) {
     console.error('createGuest', e);
     return {
@@ -133,7 +152,8 @@ const updateGuestById = async (
   }
 
   try {
-    console.log(guestId, validatedFields.data);
+    await dbConnect();
+    await guestModel.findByIdAndUpdate(guestId, validatedFields.data);
   } catch (e) {
     console.error('updateGuestById', e);
     return {
