@@ -7,7 +7,7 @@ import {
 import { TrashIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import Pagination from './Pagination';
-import { paginateGuestList } from '@/actions/guest-list.action';
+import { paginateGuestList } from '@/actions/guest.action';
 import { GuestStatus } from '@/types/guest';
 import Link from 'next/link';
 import { DialogRouterIdentifier } from '@/types/dialog-router-identifier';
@@ -29,7 +29,7 @@ export function DeleteAction({ id }: { id: string }) {
     <>
       <Link
         id={id}
-        href={`/admin/guest-list?routerIdentifier=${DialogRouterIdentifier.DeleteGuest}`}
+        href={`/admin/guest-list?routerIdentifier=${DialogRouterIdentifier.DeleteGuest}&id=${id}`}
         className='rounded-md border p-2 hover:bg-gray-100'
       >
         <span className='sr-only'>Delete</span>

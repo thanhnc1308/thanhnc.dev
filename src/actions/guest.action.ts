@@ -165,4 +165,29 @@ const updateGuestById = async (
   redirect(listPagePath);
 };
 
-export { paginateGuestList, fetchGuestById, createGuest, updateGuestById };
+const deleteGuestById = async (guestId: string | null) => {
+  if (!guestId) {
+    return;
+  }
+
+  try {
+    await dbConnect();
+    await guestModel.findByIdAndDelete(guestId);
+  } catch (e) {
+    console.error('updateGuestById', e);
+    return {
+      message: 'Internal Server Error. Failed to Update Guest.',
+    };
+  }
+
+  revalidatePath(listPagePath);
+  redirect(listPagePath);
+};
+
+export {
+  paginateGuestList,
+  fetchGuestById,
+  createGuest,
+  updateGuestById,
+  deleteGuestById,
+};
