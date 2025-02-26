@@ -3,8 +3,8 @@
 import { signIn } from '@/auth';
 import { Account, AuthError, Profile, User } from 'next-auth';
 import { z } from 'zod';
-import { createUser, findUserByEmail } from './user';
-import { UserRole } from '@/types/auth';
+import { createUser, findUserByEmail } from './user.action';
+import { getUserRoleFromEmail } from '@/utils/auth';
 
 const LoginSchema = z.object({
   email: z.string().email(),
@@ -53,12 +53,6 @@ export async function loginGoogleOAuth() {
   }
 }
 
-const _getUserRoleFromEmail = (email: string) => {
-  return process.env.ADMIN_EMAILS?.split(',').includes(email)
-    ? UserRole.Admin
-    : UserRole.User;
-};
-
 /**
  * Save user to database if they don't exist
  * Need to wrap in try/catch to prevent OAuth login from failing
@@ -87,7 +81,6 @@ export async function saveOAuthUser(
     }
 
     const existingUser = await findUserByEmail(email);
-    console.log({ existingUser, email });
     if (existingUser) {
       return;
     }
@@ -99,7 +92,7 @@ export async function saveOAuthUser(
       name,
       email,
       avatar,
-      role: _getUserRoleFromEmail(email),
+      role: getUserRoleFromEmail(email),
     });
   } catch (error) {
     console.error('saveOAuthUser', error);

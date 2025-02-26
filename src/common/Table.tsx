@@ -7,7 +7,7 @@ import {
 import { TrashIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import Pagination from './Pagination';
-import { paginateGuestList } from '@/actions/guest-list';
+import { paginateGuestList } from '@/actions/guest-list.action';
 import { GuestStatus } from '@/types/guest';
 import Link from 'next/link';
 

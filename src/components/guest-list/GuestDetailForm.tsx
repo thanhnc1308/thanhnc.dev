@@ -5,7 +5,7 @@ import { CheckIcon, ClockIcon, MinusIcon } from '@heroicons/react/24/outline';
 import { Guest, GuestStatus } from '@/types/guest';
 import { Button } from '@headlessui/react';
 import { ActionType } from '@/types/common';
-import { createGuest, GuestState, updateGuestById } from '@/actions/guest-list';
+import { createGuest, GuestState, updateGuestById } from '@/actions/guest-list.action';
 import { useActionState } from 'react';
 
 export default function Form({

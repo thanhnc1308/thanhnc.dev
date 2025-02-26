@@ -1,13 +1,15 @@
-import type { NextAuthConfig } from 'next-auth';
+import type { NextAuthConfig, User } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import { z } from 'zod';
-import { saveOAuthUser } from './actions/auth';
+import { saveOAuthUser } from './actions/auth.action';
+import { UserRole } from './types/auth';
+import { getUserRoleFromEmail } from './utils/auth';
 
 const isAdminRoutes = (path: string) => path.startsWith('/admin');
 const isProtectedRoutes = (path: string) => ['TODO'].includes(path);
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const isAdmin = (user: any) => !!user;
+const isAdmin = (user?: User) =>
+  getUserRoleFromEmail(user?.email) === UserRole.Admin;
 const shouldRedirectToDefault = (path: string) =>
   path.startsWith('/login') || path.startsWith('/signup');
 

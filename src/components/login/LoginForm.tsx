@@ -8,7 +8,7 @@ import {
 import { ArrowRightIcon } from '@heroicons/react/20/solid';
 import { useSearchParams } from 'next/navigation';
 import { useActionState } from 'react';
-import { loginCredentials, loginGoogleOAuth } from '@/actions/auth';
+import { loginCredentials, loginGoogleOAuth } from '@/actions/auth.action';
 import { Button } from '@headlessui/react';
 
 export default function LoginForm() {

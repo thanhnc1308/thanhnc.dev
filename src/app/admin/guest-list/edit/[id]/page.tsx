@@ -1,4 +1,4 @@
-import { fetchGuestById } from '@/actions/guest-list';
+import { fetchGuestById } from '@/actions/guest-list.action';
 import Breadcrumbs from '@/components/guest-list/Breadcrumbs';
 import GuestDetailForm from '@/components/guest-list/GuestDetailForm';
 import { ActionType } from '@/types/common';
