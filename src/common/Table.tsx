@@ -10,6 +10,7 @@ import Pagination from './Pagination';
 import { paginateGuestList } from '@/actions/guest-list.action';
 import { GuestStatus } from '@/types/guest';
 import Link from 'next/link';
+import { DialogRouterIdentifier } from '@/types/dialog-router-identifier';
 
 export function UpdateAction({ id }: { id: string }) {
   return (
@@ -26,14 +27,14 @@ export function UpdateAction({ id }: { id: string }) {
 export function DeleteAction({ id }: { id: string }) {
   return (
     <>
-      <button
+      <Link
         id={id}
-        type='submit'
+        href={`/admin/guest-list?routerIdentifier=${DialogRouterIdentifier.DeleteGuest}`}
         className='rounded-md border p-2 hover:bg-gray-100'
       >
         <span className='sr-only'>Delete</span>
         <TrashIcon className='w-5' />
-      </button>
+      </Link>
     </>
   );
 }
