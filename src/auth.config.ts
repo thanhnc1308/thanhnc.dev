@@ -2,6 +2,7 @@ import type { NextAuthConfig } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
 import { z } from 'zod';
+import { saveOAuthUser } from './actions/auth';
 
 const isAdminRoutes = (path: string) => path.startsWith('/admin');
 const isProtectedRoutes = (path: string) => ['TODO'].includes(path);
@@ -67,6 +68,11 @@ export const authConfig = {
       }
 
       return true;
+    },
+  },
+  events: {
+    async signIn({ user, account, profile }) {
+      await saveOAuthUser(user, account, profile);
     },
   },
   pages: {
