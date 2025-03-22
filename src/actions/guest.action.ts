@@ -14,9 +14,10 @@ import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const _buildFilter = (query: string) => {
-  return {};
+  return {
+    name: { $regex: query, $options: 'i' },
+  };
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

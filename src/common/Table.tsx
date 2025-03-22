@@ -11,7 +11,6 @@ import { paginateGuestList } from '@/actions/guest.action';
 import { GuestConfirmationStatus } from '@/types/guest';
 import Link from 'next/link';
 import { DialogRouterIdentifier } from '@/types/dialog-router-identifier';
-import { Checkbox } from '@headlessui/react';
 
 export function UpdateAction({ id }: { id: string }) {
   return (
