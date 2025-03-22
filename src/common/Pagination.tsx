@@ -4,7 +4,7 @@ import { generatePagination } from '@/utils/pagination';
 import { ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 function PaginationNumber({
   page,
@@ -72,7 +72,18 @@ function PaginationArrow({
   );
 }
 
-export default function Pagination({ totalPage }: { totalPage: number }) {
+type PaginationOption = {
+  [key: string]: string;
+};
+
+export default function Pagination({
+  totalPage,
+  perPageOptions = [10, 25, 50],
+}: {
+  totalPage: number;
+  perPageOptions?: number[];
+}) {
+  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams?.get('page')) || 1;
@@ -83,10 +94,37 @@ export default function Pagination({ totalPage }: { totalPage: number }) {
     return `${pathname}?${params.toString()}`;
   };
 
+  const onPaginationOptionsChanged = (options: PaginationOption[]) => {
+    const params = new URLSearchParams(searchParams!);
+
+    options.forEach((option) => {
+      const [key, value] = Object.entries(option)[0];
+      params.set(key, value);
+    });
+
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
   const allPages = generatePagination(currentPage, totalPage);
 
   return (
     <div className='inline-flex'>
+      <div className='flex items-center mr-4'>
+        <label htmlFor='rowsPerPage'>Per Page:</label>
+        <select
+          onChange={(e) =>
+            onPaginationOptionsChanged([{ rowsPerPage: e.target.value }])
+          }
+          name='rowsPerPage'
+          id='rowsPerPage'
+        >
+          {perPageOptions.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+      </div>
       <PaginationArrow
         direction='left'
         href={createPageURL(currentPage - 1)}
