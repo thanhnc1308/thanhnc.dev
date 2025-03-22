@@ -1,20 +1,20 @@
-const generatePagination = (currentPage: number, total: number) => {
-  // If the total number of pages is 7 or less,
+const generatePagination = (currentPage: number, totalPage: number) => {
+  // If the totalPage number of pages is 7 or less,
   // display all pages without any ellipsis.
-  if (total <= 7) {
-    return Array.from({ length: total }, (_, i) => i + 1);
+  if (totalPage <= 7) {
+    return Array.from({ length: totalPage }, (_, i) => i + 1);
   }
 
   // If the current page is among the first 3 pages,
   // show the first 3, an ellipsis, and the last 2 pages.
   if (currentPage <= 3) {
-    return [1, 2, 3, '...', total - 1, total];
+    return [1, 2, 3, '...', totalPage - 1, totalPage];
   }
 
   // If the current page is among the last 3 pages,
   // show the first 2, an ellipsis, and the last 3 pages.
-  if (currentPage >= total - 2) {
-    return [1, 2, '...', total - 2, total - 1, total];
+  if (currentPage >= totalPage - 2) {
+    return [1, 2, '...', totalPage - 2, totalPage - 1, totalPage];
   }
 
   // If the current page is somewhere in the middle,
@@ -27,7 +27,7 @@ const generatePagination = (currentPage: number, total: number) => {
     currentPage,
     currentPage + 1,
     '...',
-    total,
+    totalPage,
   ];
 };
 

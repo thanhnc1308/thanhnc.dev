@@ -1,13 +1,8 @@
 import guestModel from '@/db/models/guest.model';
-import { GuestConfirmationStatus } from '@/types/guest';
+import { GuestConfirmationStatus, GuestSource } from '@/types/guest';
 import { hash } from '@/utils';
 import { NextRequest, NextResponse } from 'next/server';
 import Papa from 'papaparse';
-
-const GuestType = {
-  Groom: 'Groom',
-  Bride: 'Bride',
-};
 
 export async function POST(req: NextRequest) {
   try {
@@ -22,8 +17,8 @@ export async function POST(req: NextRequest) {
 
     const { name } = file;
     const guestSource = name.includes('groom')
-      ? GuestType.Groom
-      : GuestType.Bride;
+      ? GuestSource.Groom
+      : GuestSource.Bride;
 
     const text = await file.text();
     const { data: parsedData } = Papa.parse(text, {
@@ -43,7 +38,7 @@ export async function POST(req: NextRequest) {
         memberCount: 1,
         status: GuestConfirmationStatus.Pending,
         invited: false,
-        source: guestSource,
+        guestSource,
       };
     });
 

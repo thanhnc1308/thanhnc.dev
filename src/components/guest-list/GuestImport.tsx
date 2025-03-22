@@ -2,10 +2,12 @@
 
 import { Button } from '@headlessui/react';
 import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
+import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 
 export default function GuestImport() {
+  const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
 
@@ -26,6 +28,7 @@ export default function GuestImport() {
       });
 
       toast.success('Guests imported successfully');
+      router.refresh();
     } catch (error) {
       console.error(error);
       toast.error('Error importing guests');

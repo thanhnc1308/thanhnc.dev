@@ -89,6 +89,7 @@ export default async function Table({
     currentPage,
     rowsPerPage,
   });
+  const totalPage = Math.ceil(total / rowsPerPage);
 
   return (
     <div className='mt-6 flow-root'>
@@ -178,7 +179,7 @@ export default async function Table({
         </div>
       </div>
       <div className='mt-5 flex w-full justify-end'>
-        <Pagination total={total} />
+        <Pagination totalPage={totalPage} />
       </div>
     </div>
   );
