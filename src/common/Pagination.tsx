@@ -75,10 +75,10 @@ function PaginationArrow({
 export default function Pagination({ total }: { total: number }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const currentPage = Number(searchParams.get('page')) || 1;
+  const currentPage = Number(searchParams?.get('page')) || 1;
 
   const createPageURL = (pageNumber: number | string) => {
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams!);
     params.set('page', pageNumber.toString());
     return `${pathname}?${params.toString()}`;
   };

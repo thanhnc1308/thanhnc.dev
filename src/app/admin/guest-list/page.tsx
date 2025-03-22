@@ -22,7 +22,9 @@ export default async function GuestListPage(props: {
     <div className='w-full px-5'>
       <div className='mt-4 flex items-center justify-end gap-2 md:mt-8'>
         <div className='w-100'>
-          <Search placeholder='Search guest...' />
+          <Suspense key='search'>
+            <Search placeholder='Search guest...' />
+          </Suspense>
         </div>
         <GuestImport />
         <Link
