@@ -1,14 +1,16 @@
 import Breadcrumbs from '@/components/guest-list/Breadcrumbs';
 import GuestDetailForm from '@/components/guest-list/GuestDetailForm';
 import { ActionType } from '@/types/common';
-import { Guest, GuestStatus } from '@/types/guest';
+import { Guest, GuestConfirmationStatus, GuestSource } from '@/types/guest';
 
 export default async function Page() {
   const defaultGuest: Guest = {
-    id: '',
+    _id: '',
     name: '',
     memberCount: 1,
-    status: GuestStatus.Pending,
+    status: GuestConfirmationStatus.Pending,
+    invited: false,
+    guestSource: GuestSource.Groom,
   };
 
   return (

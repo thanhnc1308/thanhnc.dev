@@ -13,7 +13,7 @@ import { Button } from '@headlessui/react';
 
 export default function LoginForm() {
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || '/';
+  const callbackUrl = searchParams?.get('callbackUrl') || '/';
   const [errorMessage, formAction, isPending] = useActionState(
     loginCredentials,
     undefined,

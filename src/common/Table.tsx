@@ -8,9 +8,10 @@ import { TrashIcon } from '@heroicons/react/24/outline';
 import clsx from 'clsx';
 import Pagination from './Pagination';
 import { paginateGuestList } from '@/actions/guest.action';
-import { GuestStatus } from '@/types/guest';
+import { GuestConfirmationStatus } from '@/types/guest';
 import Link from 'next/link';
 import { DialogRouterIdentifier } from '@/types/dialog-router-identifier';
+import { Checkbox } from '@headlessui/react';
 
 export function UpdateAction({ id }: { id: string }) {
   return (
@@ -45,25 +46,27 @@ export function Status({ status }: { status: string }) {
       className={clsx(
         'inline-flex items-center rounded-full px-2 py-1 text-xs',
         {
-          'bg-gray-100 text-gray-500': status === GuestStatus.Pending,
-          'bg-green-500 text-white': status === GuestStatus.Accepted,
-          'bg-red-500 text-white': status === GuestStatus.Declined,
+          'bg-gray-100 text-gray-500':
+            status === GuestConfirmationStatus.Pending,
+          'bg-green-500 text-white':
+            status === GuestConfirmationStatus.Accepted,
+          'bg-red-500 text-white': status === GuestConfirmationStatus.Declined,
         },
       )}
     >
-      {status === GuestStatus.Pending ? (
+      {status === GuestConfirmationStatus.Pending ? (
         <>
           Pending
           <ClockIcon className='ml-1 w-4 text-gray-500' />
         </>
       ) : null}
-      {status === GuestStatus.Accepted ? (
+      {status === GuestConfirmationStatus.Accepted ? (
         <>
           Accepted
           <CheckIcon className='ml-1 w-4 text-white' />
         </>
       ) : null}
-      {status === GuestStatus.Declined ? (
+      {status === GuestConfirmationStatus.Declined ? (
         <>
           Declined
           <MinusIcon className='ml-1 w-4 text-white' />
@@ -95,7 +98,7 @@ export default async function Table({
           <div className='md:hidden'>
             {data?.map((guest) => (
               <div
-                key={guest.id}
+                key={guest._id}
                 className='mb-2 w-full rounded-md bg-white p-4'
               >
                 <div className='flex items-center justify-between border-b pb-4'>
@@ -109,8 +112,8 @@ export default async function Table({
                     <p className='text-xl font-medium'>{guest.memberCount}</p>
                   </div>
                   <div className='flex justify-end gap-2'>
-                    <UpdateAction id={guest.id} />
-                    <DeleteAction id={guest.id} />
+                    <UpdateAction id={guest._id} />
+                    <DeleteAction id={guest._id} />
                   </div>
                 </div>
               </div>
@@ -128,6 +131,12 @@ export default async function Table({
                 <th scope='col' className='px-3 py-5 font-medium'>
                   Member Count
                 </th>
+                <th scope='col' className='px-3 py-5 font-medium'>
+                  Invited
+                </th>
+                <th scope='col' className='px-3 py-5 font-medium'>
+                  Guest Source
+                </th>
                 <th scope='col' className='py-3 pl-6 pr-3'>
                   <span className='sr-only'>Actons</span>
                 </th>
@@ -136,7 +145,7 @@ export default async function Table({
             <tbody className='bg-white'>
               {data?.map((guest) => (
                 <tr
-                  key={guest.id}
+                  key={guest._id}
                   className='w-full border-b py-3 text-sm last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg'
                 >
                   <td className='whitespace-nowrap px-3 py-3'>{guest.name}</td>
@@ -146,10 +155,21 @@ export default async function Table({
                   <td className='whitespace-nowrap px-3 py-3'>
                     {guest.memberCount}
                   </td>
+                  <td className='whitespace-nowrap px-3 py-3'>
+                    <input
+                      type='checkbox'
+                      readOnly
+                      checked={guest.invited}
+                      className='group block size-4 rounded border bg-white data-[checked]:bg-blue-500'
+                    />
+                  </td>
+                  <td className='whitespace-nowrap px-3 py-3'>
+                    {guest.guestSource}
+                  </td>
                   <td className='whitespace-nowrap py-3 pl-6 pr-3'>
                     <div className='flex justify-end gap-3'>
-                      <UpdateAction id={guest.id} />
-                      <DeleteAction id={guest.id} />
+                      <UpdateAction id={guest._id} />
+                      <DeleteAction id={guest._id} />
                     </div>
                   </td>
                 </tr>

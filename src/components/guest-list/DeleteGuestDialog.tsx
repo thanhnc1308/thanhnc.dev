@@ -16,14 +16,16 @@ export default function DeleteGuestDialog() {
 
   const handleDeleteGuest = async () => {
     try {
-      const guestId = searchParams.get('id');
+      const guestId = searchParams?.get('id');
+      if (!guestId) {
+        throw new Error('Guest ID not found');
+      }
       await deleteGuestById(guestId);
       toast.success('Guest deleted successfully');
       router.back();
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('handleDeleteGuest', error);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      toast.error((error as any)?.message);
+      toast.error((error as Error).message);
     }
   };
 

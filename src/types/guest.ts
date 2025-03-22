@@ -1,14 +1,21 @@
-export enum GuestStatus {
+export enum GuestConfirmationStatus {
   Accepted = 'accepted',
   Declined = 'declined',
   Pending = 'pending',
 }
 
+export enum GuestSource {
+  Groom = 'groom',
+  Bride = 'bride',
+}
+
 export type Guest = {
-  id: string;
+  _id: string;
   name: string;
-  status: GuestStatus;
+  status: GuestConfirmationStatus;
   memberCount: number;
+  invited: boolean;
+  guestSource: GuestSource;
 };
 
 export type GuestListPaginationResponse = {

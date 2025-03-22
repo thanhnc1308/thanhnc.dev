@@ -2,8 +2,14 @@
 
 import guestModel from '@/db/models/guest.model';
 import dbConnect from '@/db/mongodb';
-import { Guest, GuestListPaginationResponse, GuestStatus } from '@/types/guest';
+import {
+  Guest,
+  GuestListPaginationResponse,
+  GuestConfirmationStatus,
+  GuestSource,
+} from '@/types/guest';
 import { PaginationRequest } from '@/types/pagination';
+import { hash } from '@/utils';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
@@ -44,12 +50,7 @@ const paginateGuestList = async ({
 
     return {
       total,
-      data: guests.map((guest) => ({
-        id: guest._id.toString(),
-        name: guest.name,
-        memberCount: guest.memberCount,
-        status: guest.status,
-      })),
+      data: guests,
     };
   } catch (error) {
     console.error('paginateGuestList', error);
@@ -67,12 +68,7 @@ const fetchGuestById = async (guestId: string): Promise<Guest | null> => {
     return null;
   }
 
-  return {
-    id: _guest._id.toString(),
-    name: _guest.name,
-    memberCount: _guest.memberCount,
-    status: _guest.status,
-  };
+  return _guest;
 };
 
 export type GuestState = {
@@ -80,12 +76,14 @@ export type GuestState = {
     name?: string[];
     memberCount?: string[];
     status?: string[];
+    invited?: string[];
+    guestSource?: string[];
   };
   message?: string | null;
 };
 
 const GuestSchema = z.object({
-  id: z.string(),
+  _id: z.string(),
   name: z.string({
     invalid_type_error: 'Name must be a string.',
     required_error: 'Name is required.',
@@ -95,21 +93,29 @@ const GuestSchema = z.object({
     required_error: 'Member Count is required.',
   }),
   status: z.enum([
-    GuestStatus.Accepted,
-    GuestStatus.Pending,
-    GuestStatus.Declined,
+    GuestConfirmationStatus.Accepted,
+    GuestConfirmationStatus.Pending,
+    GuestConfirmationStatus.Declined,
   ]),
+  invited: z.boolean(),
+  guestSource: z.enum([GuestSource.Groom, GuestSource.Bride]),
 });
-const CreateGuestSchema = GuestSchema.omit({ id: true });
-const UpdateGuestSchema = GuestSchema.omit({ id: true });
+const CreateGuestSchema = GuestSchema.omit({ _id: true });
+const UpdateGuestSchema = GuestSchema.omit({ _id: true });
 
 const listPagePath = '/admin/guest-list';
+
+const generateGuestId = (guest: Guest) => {
+  return hash(`${guest.guestSource}-${guest.name}`);
+};
 
 const createGuest = async (prevState: GuestState, formData: FormData) => {
   const validatedFields = CreateGuestSchema.safeParse({
     name: formData.get('name'),
     memberCount: formData.get('memberCount'),
     status: formData.get('status'),
+    invited: !!formData.get('invited'),
+    guestSource: formData.get('guestSource'),
   });
 
   if (!validatedFields.success) {
@@ -121,7 +127,10 @@ const createGuest = async (prevState: GuestState, formData: FormData) => {
 
   try {
     await dbConnect();
-    await guestModel.create(validatedFields.data);
+    await guestModel.create({
+      _id: generateGuestId(validatedFields.data as Guest),
+      ...validatedFields.data,
+    });
   } catch (e) {
     console.error('createGuest', e);
     return {
@@ -142,6 +151,8 @@ const updateGuestById = async (
     name: formData.get('name'),
     memberCount: formData.get('memberCount'),
     status: formData.get('status'),
+    invited: !!formData.get('invited'),
+    guestSource: formData.get('guestSource'),
   });
 
   if (!validatedFields.success) {
