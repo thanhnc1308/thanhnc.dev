@@ -5,6 +5,7 @@ import PlusIcon from '@heroicons/react/24/outline/PlusIcon';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import toast from 'react-hot-toast';
+import Spinner from '../common/Spinner';
 
 export default function GuestImport() {
   const router = useRouter();
@@ -54,6 +55,11 @@ export default function GuestImport() {
         <span className='hidden md:block'>Import</span>{' '}
         <PlusIcon className='h-5 md:ml-4' />
       </Button>
+      {isUploading && (
+        <div className='ml-2'>
+          <Spinner />
+        </div>
+      )}
     </div>
   );
 }
