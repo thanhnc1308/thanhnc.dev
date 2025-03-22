@@ -10,13 +10,16 @@ export default async function GuestListPage(props: {
   // https://nextjs.org/docs/app/api-reference/file-conventions/page
   searchParams?: Promise<{
     query?: string;
+    sort?: string;
     page?: string;
+    rowsPerPage?: string;
   }>;
 }) {
   const searchParams = await props.searchParams;
   const query = searchParams?.query || '';
+  const sort = searchParams?.sort || '';
   const currentPage = Number(searchParams?.page) || 1;
-  const rowsPerPage = 10;
+  const rowsPerPage = Number(searchParams?.rowsPerPage) || 10;
 
   return (
     <div className='w-full px-5'>
@@ -38,6 +41,7 @@ export default async function GuestListPage(props: {
       <Suspense key={query + currentPage} fallback={<TableSkeletons />}>
         <Table
           query={query}
+          sort={sort}
           currentPage={currentPage}
           rowsPerPage={rowsPerPage}
         />

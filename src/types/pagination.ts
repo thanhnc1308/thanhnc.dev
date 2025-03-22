@@ -1,5 +1,6 @@
 export interface PaginationRequest {
-  query: string;
-  currentPage: number;
-  rowsPerPage: number;
+  queryString?: string;
+  sortString?: string;
+  currentPage?: number;
+  rowsPerPage?: number;
 }

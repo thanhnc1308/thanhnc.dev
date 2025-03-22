@@ -10,31 +10,41 @@ import {
 } from '@/types/guest';
 import { PaginationRequest } from '@/types/pagination';
 import { hash } from '@/utils';
+import { SortOrder } from 'mongoose';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
 
-const _buildFilter = (query: string) => {
+const _buildFilter = (query?: string) => {
+  if (!query) {
+    return {};
+  }
+
   return {
     name: { $regex: query, $options: 'i' },
   };
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const _buildSort = (sort: string) => {
-  return {};
+const _buildSort = (sort?: string) => {
+  if (!sort) {
+    return { name: 1 as SortOrder };
+  }
+
+  // TODO
+  return undefined;
 };
 
 const paginateGuestList = async ({
-  query,
+  queryString,
+  sortString,
   currentPage = 1,
   rowsPerPage = 10,
 }: PaginationRequest): Promise<GuestListPaginationResponse> => {
   try {
     await dbConnect();
 
-    const filter = _buildFilter(query);
-    const sort = _buildSort(query);
+    const filter = _buildFilter(queryString);
+    const sort = _buildSort(sortString);
     const skip = (currentPage - 1) * rowsPerPage;
     const fetchGuestsPromise = guestModel
       .find(filter)

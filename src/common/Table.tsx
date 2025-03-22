@@ -77,15 +77,18 @@ export function Status({ status }: { status: string }) {
 
 export default async function Table({
   query,
+  sort,
   currentPage,
   rowsPerPage,
 }: {
-  query: string;
-  currentPage: number;
+  query?: string;
+  sort?: string;
+  currentPage?: number;
   rowsPerPage: number;
 }) {
   const { data, total } = await paginateGuestList({
-    query,
+    queryString: query,
+    sortString: sort,
     currentPage,
     rowsPerPage,
   });
